@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import rospy
-
 from swarmController import swarControllerClass
-
 
 rospy.init_node("controller_name")
 controller = swarControllerClass()
