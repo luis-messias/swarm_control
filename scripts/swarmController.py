@@ -22,19 +22,23 @@ class swarControllerClass():
         self.robotVelocity_wz = np.zeros(self.numberRobots)
 
 
-        self.subscriber = []
+        self.subscriberOdometry = []
+        self.subscriberIndividualGoal = []
         self.publisher = []
-
-        for i in range(self.numberRobots):
-            self.subscriber.append(rospy.Subscriber("/" + self.swarmName + "/robot_" + str(i) + "/odom", Odometry, self.callbackOdometry, i))
-            self.publisher.append(rospy.Publisher("/" + self.swarmName + "/robot_" + str(i) + "/cmd_vel", Twist, queue_size = 2))
-        
-        self.masterSubscriber = rospy.Subscriber("/" + self.swarmName + "/goal", Pose, self.callbackMasterGoal)
-
 
         self.robotGoal_x = np.zeros(self.numberRobots)
         self.robotGoal_y = np.zeros(self.numberRobots)     
-        self.robotGoal_flag = np.zeros(self.numberRobots)     
+        self.robotGoal_flag = np.zeros(self.numberRobots) 
+
+        for i in range(self.numberRobots):
+            self.subscriberOdometry.append(rospy.Subscriber("/" + self.swarmName + "/robot_" + str(i) + "/odom", Odometry, self.callbackOdometry, i))
+            self.publisher.append(rospy.Publisher("/" + self.swarmName + "/robot_" + str(i) + "/cmd_vel", Twist, queue_size = 2))
+            self.subscriberIndividualGoal.append(rospy.Subscriber("/controller_" + self.swarmName + "/goal_" + str(i), Pose, self.callbackIndividualGoal, i))
+
+        self.masterGoalSubscriber = rospy.Subscriber("/controller_" + self.swarmName + "/goal_master", Pose, self.callbackMasterGoal)
+
+
+            
 
 
     def callbackOdometry(self, msg, i):
@@ -59,6 +63,11 @@ class swarControllerClass():
         self.robotGoal_x = np.ones(self.numberRobots) * msg.position.x
         self.robotGoal_y = np.ones(self.numberRobots) * msg.position.y
         self.robotGoal_flag = np.ones(self.numberRobots) * 1
+
+    def callbackIndividualGoal(self, msg, i):
+        self.robotGoal_x[i] = msg.position.x
+        self.robotGoal_y[i] = msg.position.y
+        self.robotGoal_flag[i] = 1
 
     def calculatePotentialField(self):
         for i in range(self.numberRobots):
