@@ -1,6 +1,6 @@
 # TODO
 * Adicionar subscribe individual
-* Documentar codigo ja existente
 * Passar parametros do campo via parametros
-* Fazer calculos usando vetorização do numpy
 * Fazer funcao de plot
+* Documentar codigo ja existente
+* Fazer calculos usando vetorização do numpy
