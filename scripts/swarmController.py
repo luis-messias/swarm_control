@@ -71,16 +71,16 @@ class swarControllerClass():
 
     def calculatePotentialField(self):
         for i in range(self.numberRobots):
-            u1, v1 = campo_repulsao(self.robotPosition_x, self.robotPosition_y, self.robotPosition_x[i], self.robotPosition_y[i])
+            u1, v1 = campo_repulsao(self.robotPosition_x[i], self.robotPosition_y[i], self.robotPosition_x, self.robotPosition_y)
             if self.robotGoal_flag[i]:
-                u2, v2 = campo_atracao(self.robotPosition_x[i], self.robotPosition_y[i], self.robotGoal_x[i], self.robotGoal_y[i])
+                u2, v2 = campo_atracao(self.robotGoal_x[i], self.robotGoal_y[i], self.robotPosition_x[i], self.robotPosition_y[i])
             else:
                 u2, v2 = 0,0
 
             u = u1 + u2
             v = v1 + v2
             
-            erro_angle = np.arctan2(u, v) - self.robotPosition_yaw[i]
+            erro_angle = np.arctan2(v,u) - self.robotPosition_yaw[i]
             while(erro_angle > np.pi):
                 erro_angle -= 2*np.pi
             while(erro_angle < -np.pi):

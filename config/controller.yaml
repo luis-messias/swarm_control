@@ -1,2 +1,3 @@
 swarm_name: swarm_node
 num_robots: 10
+plot_flag: true

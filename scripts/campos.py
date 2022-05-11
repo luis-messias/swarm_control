@@ -3,7 +3,7 @@ from numpy.core.numeric import Inf, nan
 import math
 
 def campo_atracao( x, y, x0_ , y0_ , beta = 1, r = 0.30, s = 0.80):
-        angle = np.arctan2(x0_ - x, y0_ - y)
+        angle = np.arctan2( y0_ - y, x0_ - x)
         d = math.sqrt((x-x0_)**2 + (y-y0_)**2)
         if d < r:
             U = 0
@@ -19,12 +19,12 @@ def campo_atracao( x, y, x0_ , y0_ , beta = 1, r = 0.30, s = 0.80):
 
         return U, V
 
-def campo_repulsao(list_x,list_y ,x, y, beta =  1, r = 0.001, s = 1):
+def campo_repulsao(x, y, list_x,list_y , beta =  1, r = 0.001, s = 1):
         U = 0
         V = 0
         for i in range(len(list_x)):
             d = math.sqrt((x-list_x[i])**2 + (y-list_y[i])**2)
-            angle = np.arctan2(list_x[i] - x, list_y[i] - y)
+            angle = np.arctan2( list_y[i] - y, list_x[i] - x)
             if d < r:
                 U += 0
                 V += 0
@@ -39,7 +39,7 @@ def campo_repulsao(list_x,list_y ,x, y, beta =  1, r = 0.001, s = 1):
 
         return U, V
 
-def campo_repulsao2(list_x, list_y, x, y, beta = 2, r = 0.001, s = 0.5):        
+def campo_repulsao2( x, y, list_x, list_y, beta = 2, r = 0.001, s = 0.5):        
         d_ = ((list_x - x)**2 + (list_y - y)**2)**0.5
         d_ = np.where(d_ > 0.00000001, d_, Inf)
         d = min(d_)
@@ -52,8 +52,8 @@ def campo_repulsao2(list_x, list_y, x, y, beta = 2, r = 0.001, s = 0.5):
             V += 0
 
         elif d <= (s+r):
-            U += -beta*(s+r-d) *np.cos(np.arctan2(list_x[indice] - x, list_y[indice] - y))
-            V += -beta*(s+r-d) *np.sin(np.arctan2(list_x[indice] - x, list_y[indice] - y))
+            U += -beta*(s+r-d) *np.cos(np.arctan2(list_y[indice] - y, list_x[indice] - x,))
+            V += -beta*(s+r-d) *np.sin(np.arctan2(list_y[indice] - y, list_x[indice] - x,))
         else:
             U += 0                
             V += 0
